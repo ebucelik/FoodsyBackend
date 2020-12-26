@@ -8,7 +8,6 @@ public class FoodsyBackendApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(FoodsyBackendApplication.class, args);
-
 	}
 
 }
