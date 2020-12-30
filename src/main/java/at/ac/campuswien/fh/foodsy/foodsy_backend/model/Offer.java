@@ -1,10 +1,11 @@
 package at.ac.campuswien.fh.foodsy.foodsy_backend.model;
 
+import java.io.Serializable;
 import javax.persistence.*;
 
 @Entity
 @Table(name="OFFER")
-public class Offer {
+public class Offer implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -2,7 +2,7 @@ package at.ac.campuswien.fh.foodsy.foodsy_backend.service;
 
 import at.ac.campuswien.fh.foodsy.foodsy_backend.model.User;
 
-public interface UserServie {
+public interface UserService {
     User getUserByUUID(String userUUID);
 
     String loginByCredentials(String username, String password);

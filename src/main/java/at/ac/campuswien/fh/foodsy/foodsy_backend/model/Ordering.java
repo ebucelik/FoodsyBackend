@@ -1,21 +1,22 @@
 package at.ac.campuswien.fh.foodsy.foodsy_backend.model;
 
+import java.io.Serializable;
 import javax.persistence.*;
 
 @Entity
 @Table(name = "ORDERING")
-public class Ordering {
+public class Ordering implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
-    public long id;
+    private long id;
     @Column(name = "ORDERING_UUID")
-    public String orderingUuid;
+    private String orderingUuid;
     @Column(name = "OFFERING_UUID")
-    public String offeringUuid;
+    private String offeringUuid;
     @Column(name = "OFFER_ID")
-    public long offeringId;
+    private long offeringId;
 
     public Ordering(){}
 
