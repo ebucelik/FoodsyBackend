@@ -5,11 +5,13 @@ import java.util.List;
 
 public interface ReviewService {
     
-    void reviewOrder(String reviewedId, String orderId, Integer reviewPoints, String reviewText);
+    Review reviewOrder(Review review);
     
     void deleteReview(Review review);
     
     Review getReviewById(Long id);
     
     List<Review> getAllReviews();
+
+    long getAverageReviewPoint(String uuid);
 }
