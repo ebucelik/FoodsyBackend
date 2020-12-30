@@ -10,6 +10,8 @@ public interface OfferService {
 
     List<Offer> getAllOffers();
 
+    List<Offer> getAllOfferByName(String mealName);
+
     Offer saveOffer(Offer offer);
 
     Offer deleteOffer(Offer offer);

@@ -24,6 +24,11 @@ public class OfferServiceImpl implements OfferService{
     }
 
     @Override
+    public List<Offer> getAllOfferByName(String mealName) {
+        return offerDaoImpl.getOffersByName(mealName);
+    }
+
+    @Override
     public Offer saveOffer(Offer offer) {
         return offerDaoImpl.save(offer);
     }

@@ -4,6 +4,7 @@ import at.ac.campuswien.fh.foodsy.foodsy_backend.controller.dto.OfferDTO;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.controller.mapper.OfferMapper;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.exception.ApiInternalProcessingException;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.model.Offer;
+import at.ac.campuswien.fh.foodsy.foodsy_backend.model.OfferList;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.service.OfferService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,9 +33,23 @@ public class OfferController {
 
     @GetMapping("/offering")
     @ResponseStatus(HttpStatus.OK)
-    public List<Offer> getOffersByUuid(@Valid @RequestParam String uuid){
+    public OfferList getOffersByUuid(@Valid @RequestParam String uuid){
         try{
-            return offerService.getOffersByUuid(uuid);
+            OfferList offerList = new OfferList();
+            offerList.setOfferList(offerService.getOffersByUuid(uuid));
+            return offerList;
+        }catch (Exception e){
+            throw new ApiInternalProcessingException("Internal Error while handling request", e);
+        }
+    }
+
+    @GetMapping("/offeringSearch")
+    @ResponseStatus(HttpStatus.OK)
+    public OfferList getOffersByName(@Valid @RequestParam String mealName){
+        try{
+            OfferList offerList = new OfferList();
+            offerList.setOfferList(offerService.getAllOfferByName(mealName));
+            return offerList;
         }catch (Exception e){
             throw new ApiInternalProcessingException("Internal Error while handling request", e);
         }
@@ -42,9 +57,11 @@ public class OfferController {
 
     @GetMapping("/offeringAll")
     @ResponseStatus(HttpStatus.OK)
-    public List<Offer> getAllOffers(){
+    public OfferList getAllOffers(){
         try{
-            return offerService.getAllOffers();
+            OfferList offerList = new OfferList();
+            offerList.setOfferList(offerService.getAllOffers());
+            return offerList;
         }catch (Exception e){
             throw new ApiInternalProcessingException("Internal Error while handling request", e);
         }

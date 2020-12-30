@@ -2,6 +2,7 @@ package at.ac.campuswien.fh.foodsy.foodsy_backend.controller;
 
 import at.ac.campuswien.fh.foodsy.foodsy_backend.exception.ApiInternalProcessingException;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.model.Ordering;
+import at.ac.campuswien.fh.foodsy.foodsy_backend.model.OrderingList;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,9 +31,11 @@ public class OrderController {
 
     @GetMapping("/ordering")
     @ResponseStatus(HttpStatus.OK)
-    public List<Ordering> getAllOrders(@Valid @RequestParam String uuid){
+    public OrderingList getAllOrders(@Valid @RequestParam String uuid){
         try {
-            return orderService.getOrders(uuid);
+            OrderingList orderingList = new OrderingList();
+            orderingList.setOrderingList(orderService.getOrders(uuid));
+            return orderingList;
         }catch (Exception e){
             throw new ApiInternalProcessingException("Internal Error while handling request", e);
         }

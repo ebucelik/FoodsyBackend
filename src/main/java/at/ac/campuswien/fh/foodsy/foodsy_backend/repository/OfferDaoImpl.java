@@ -18,6 +18,7 @@ public class OfferDaoImpl implements OfferDao{
     private static final String READ_ALL_OFFERS_BY_UUID = "SELECT o FROM Offer o WHERE o.userUUID = ?0";
     private static final String READ_BY_ID = "SELECT o FROM Offer o WHERE o.id = ?0";
     private static final String READ_ALL_OFFERS = "SELECT o FROM Offer o";
+    private static final String READ_ALL_OFFERS_BY_NAME = "SELECT o FROM Offer o WHERE o.mealName LIKE ?0";
 
     @Override
     public List<Offer> getOffers(String uuid) {
@@ -41,6 +42,21 @@ public class OfferDaoImpl implements OfferDao{
             Query<Offer> getAllOffers = session.createQuery(READ_ALL_OFFERS);
 
             return getAllOffers.getResultList();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<Offer> getOffersByName(String mealName) {
+        try{
+            session = sessionFactory.openSession();
+            Query<Offer> getOffersByName = session.createQuery(READ_ALL_OFFERS_BY_NAME);
+            getOffersByName.setParameter(0, mealName + "%");
+
+            return getOffersByName.getResultList();
         }catch (Exception e){
             e.printStackTrace();
         }

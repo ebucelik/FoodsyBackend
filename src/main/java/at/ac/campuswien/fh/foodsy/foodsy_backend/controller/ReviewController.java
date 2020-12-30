@@ -38,7 +38,7 @@ public class ReviewController {
         }
     }
 
-    @PostMapping("/reviewAverage")
+    @GetMapping("/reviewAverage")
     @ResponseStatus(HttpStatus.OK)
     public long getAverageReviewPoints(@Valid @RequestParam String uuid){
         try{

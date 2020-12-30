@@ -9,6 +9,8 @@ public interface OfferDao {
 
     List<Offer> getAllOffers();
 
+    List<Offer> getOffersByName(String mealName);
+
     Offer getOfferById(long id);
 
     Offer save(Offer offer);
