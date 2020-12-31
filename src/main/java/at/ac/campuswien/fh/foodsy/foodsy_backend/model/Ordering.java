@@ -17,6 +17,8 @@ public class Ordering implements Serializable{
     private String offeringUuid;
     @Column(name = "OFFER_ID")
     private long offeringId;
+    @Column(name = "OFFER")
+    private Offer offer;
 
     public Ordering(){}
 
@@ -30,4 +32,6 @@ public class Ordering implements Serializable{
     public String getOfferingUuid(){return this.offeringUuid;}
     public long getOfferingId(){return this.offeringId;}
     public long getId(){return this.id;}
+    public Offer getOffer(){return this.offer;}
+    public void setOffer(Offer offer){this.offer = offer;}
 }

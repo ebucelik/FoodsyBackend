@@ -1,5 +1,6 @@
 package at.ac.campuswien.fh.foodsy.foodsy_backend.repository;
 
+import at.ac.campuswien.fh.foodsy.foodsy_backend.model.Offer;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.model.Ordering;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -17,6 +18,19 @@ public class OrderDaoImpl implements OrderDao {
     static Session session;
     private static final String READ_ALL_ORDERS_BY_UUID = "Select o FROM Ordering o WHERE o.orderingUuid = ?0";
     private static final String READ_ORDER_BY_ID = "Select o FROM Ordering o WHERE o.id = ?0";
+
+    @Override
+    public List<Ordering> getOrdersWithOffers(List<Offer> offers, List<Ordering> orderings) {
+        orderings.forEach(order -> {
+            offers.forEach(offerFind -> {
+                if(offerFind.getId() == order.getOfferingId()){
+                    order.setOffer(offerFind);
+                }
+            });
+        });
+
+        return orderings;
+    }
 
     @Override
     public List<Ordering> getAllOrdersByUuid(String uuid) {

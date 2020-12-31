@@ -1,5 +1,6 @@
 package at.ac.campuswien.fh.foodsy.foodsy_backend.service;
 
+import at.ac.campuswien.fh.foodsy.foodsy_backend.model.Offer;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.model.Ordering;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.repository.OrderDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,11 @@ public class OrderServiceImpl implements OrderService{
 
     @Autowired
     OrderDaoImpl orderDaoImpl;
+
+    @Override
+    public List<Ordering> getOrdersWithOffer(List<Offer> offers, List<Ordering> orderings) {
+        return orderDaoImpl.getOrdersWithOffers(offers, orderings);
+    }
 
     @Override
     public List<Ordering> getOrders(String uuid) {
