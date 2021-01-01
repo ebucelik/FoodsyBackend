@@ -17,13 +17,16 @@ public class UserDTO {
     private final String surname;
     @NotNull
     private final String password;
+    @NotNull
+    private final String profileImage;
 
-    public UserDTO(String userUUID, String username, String firstname, String surname, String password) {
+    public UserDTO(String userUUID, String username, String firstname, String surname, String password, String profileImage) {
         this.userUUID = userUUID;
         this.username = username;
         this.firstname = firstname;
         this.surname = surname;
         this.password = password;
+        this.profileImage = profileImage;
     }
 
     public String getUserUUID() {
@@ -45,4 +48,6 @@ public class UserDTO {
     public String getPassword() {
         return password;
     }
+
+    public String getProfileImage() { return profileImage; }
 }

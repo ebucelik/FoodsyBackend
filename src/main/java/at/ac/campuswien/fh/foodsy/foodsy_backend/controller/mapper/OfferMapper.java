@@ -25,7 +25,8 @@ public class OfferMapper {
                 offer.getArea(),
                 offer.getEncodedImage(),
                 offer.getIngredients(),
-                offer.getCurrentTimestamp()
+                offer.getCurrentTimestamp(),
+                offer.getUser()
         );
     }
 }

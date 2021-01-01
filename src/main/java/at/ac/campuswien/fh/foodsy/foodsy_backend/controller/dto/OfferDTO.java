@@ -1,5 +1,7 @@
 package at.ac.campuswien.fh.foodsy.foodsy_backend.controller.dto;
 
+import at.ac.campuswien.fh.foodsy.foodsy_backend.model.User;
+
 import java.util.Date;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -24,7 +26,9 @@ public class OfferDTO {
     @NotNull
     private final Date currentTimestamp;
 
-    public OfferDTO(long id, String userUUID, String mealName, String category, String area, String encodedImage, String ingredients, Date currentTimestamp){
+    private final User user;
+
+    public OfferDTO(long id, String userUUID, String mealName, String category, String area, String encodedImage, String ingredients, Date currentTimestamp, User user){
         this.id = id;
         this.userUUID = userUUID;
         this.mealName = mealName;
@@ -33,6 +37,7 @@ public class OfferDTO {
         this.encodedImage = encodedImage;
         this.ingredients = ingredients;
         this.currentTimestamp = currentTimestamp;
+        this.user = user;
     }
 
     public String getUserUUID(){return this.userUUID;}
@@ -40,6 +45,7 @@ public class OfferDTO {
     public String getCategory(){return this.category;}
     public String getArea(){return this.area;}
     public long getId(){return this.id;}
+    public User getUser(){return this.user;}
 
     public String getEncodedImage() {
         return encodedImage;

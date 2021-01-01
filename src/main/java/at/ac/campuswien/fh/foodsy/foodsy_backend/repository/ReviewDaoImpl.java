@@ -90,6 +90,10 @@ public class ReviewDaoImpl implements ReviewDao {
 
             long sum = one + two + three + four + five;
 
+            if(sum == 0){
+                return 0;
+            }
+
             double average = ((one + 2*two + 3*three + 4*four + 5*five)/(sum));
             return Math.round(average);
         }catch (NoSuchElementException e){

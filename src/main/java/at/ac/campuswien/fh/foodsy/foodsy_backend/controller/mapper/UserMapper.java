@@ -8,10 +8,10 @@ public class UserMapper {
     private UserMapper(){}
 
     public static User dtoToUser(UserDTO userDTO){
-        return new User(userDTO.getUserUUID(),userDTO.getUsername(),userDTO.getFirstname(),userDTO.getSurname(),userDTO.getPassword());
+        return new User(userDTO.getUserUUID(),userDTO.getUsername(),userDTO.getFirstname(),userDTO.getSurname(),userDTO.getPassword(), userDTO.getProfileImage());
     }
 
     public static UserDTO userToDTO(User user){
-        return new UserDTO(user.getUserUUID(),user.getUsername(),user.getFirstname(),user.getSurname(),null);
+        return new UserDTO(user.getUserUUID(),user.getUsername(),user.getFirstname(),user.getSurname(),null, user.getProfileImage());
     }
 }

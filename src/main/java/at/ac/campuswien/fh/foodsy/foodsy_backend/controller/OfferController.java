@@ -6,6 +6,7 @@ import at.ac.campuswien.fh.foodsy.foodsy_backend.exception.ApiInternalProcessing
 import at.ac.campuswien.fh.foodsy.foodsy_backend.model.Offer;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.model.OfferList;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.service.OfferService;
+import at.ac.campuswien.fh.foodsy.foodsy_backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -21,11 +22,16 @@ public class OfferController {
     @Autowired
     OfferService offerService;
 
+    @Autowired
+    UserService userService;
+
     @PostMapping("/offering")
     @ResponseStatus(HttpStatus.CREATED)
     public OfferDTO createOffer(@Valid @RequestBody OfferDTO offerDTO){
         try{
-            return OfferMapper.offerToDto(offerService.saveOffer(OfferMapper.dtoToOffer(offerDTO)));
+            Offer offer = OfferMapper.dtoToOffer(offerDTO);
+            offer.setUser(userService.getUserByUUID(offer.getUserUUID()));
+            return OfferMapper.offerToDto(offerService.saveOffer(offer));
         }catch (Exception e){
             throw new ApiInternalProcessingException("Internal Error while handling request", e);
         }
