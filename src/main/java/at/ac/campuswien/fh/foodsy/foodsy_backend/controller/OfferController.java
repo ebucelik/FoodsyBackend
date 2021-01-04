@@ -1,18 +1,21 @@
 package at.ac.campuswien.fh.foodsy.foodsy_backend.controller;
 
-import at.ac.campuswien.fh.foodsy.foodsy_backend.controller.dto.OfferDTO;
+import at.ac.campuswien.fh.foodsy.foodsy_backend.controller.dto.input.PostOfferDTO;
+import at.ac.campuswien.fh.foodsy.foodsy_backend.controller.dto.output.GetOfferDTO;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.controller.mapper.OfferMapper;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.exception.ApiInternalProcessingException;
-import at.ac.campuswien.fh.foodsy.foodsy_backend.model.Offer;
-import at.ac.campuswien.fh.foodsy.foodsy_backend.model.OfferList;
+import at.ac.campuswien.fh.foodsy.foodsy_backend.exception.NoSuchOfferException;
+import at.ac.campuswien.fh.foodsy.foodsy_backend.exception.NoSuchUserException;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.service.OfferService;
-import at.ac.campuswien.fh.foodsy.foodsy_backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.List;
 
 @Validated
@@ -22,64 +25,70 @@ public class OfferController {
     @Autowired
     OfferService offerService;
 
-    @Autowired
-    UserService userService;
+    @GetMapping(value = "/offer", params = {"uuid"})
+    @ResponseStatus(HttpStatus.OK)
+    public List<GetOfferDTO> getOffersByUuid(@Valid @NotNull @Size(min = 36, max = 36) @RequestParam String uuid){
+        try{
+            List<GetOfferDTO> getOfferDTOS = new ArrayList<>();
+            offerService.getOffersByUuid(uuid).forEach(x-> getOfferDTOS.add(OfferMapper.offerToGetDto(x)));
+            return getOfferDTOS;
+        }catch (Exception unexpected){
+            unexpected.printStackTrace();
+            throw new ApiInternalProcessingException("Internal Error while handling request", unexpected);
+        }
+    }
 
-    @PostMapping("/offering")
+    @GetMapping(value = "/offer", params = {"mealName"})
+    @ResponseStatus(HttpStatus.OK)
+    public List<GetOfferDTO> getOpenOffersByName(@Valid @NotNull @RequestParam String mealName){
+        try{
+            List<GetOfferDTO> getOfferDTOS = new ArrayList<>();
+            offerService.getAllOpenOfferByName(mealName).forEach(x-> getOfferDTOS.add(OfferMapper.offerToGetDto(x)));
+            return getOfferDTOS;
+        }catch (Exception unexpected){
+            unexpected.printStackTrace();
+            throw new ApiInternalProcessingException("Internal Error while handling request", unexpected);
+        }
+    }
+
+    @GetMapping(value = "/offer", params = {})
+    @ResponseStatus(HttpStatus.OK)
+    public List<GetOfferDTO> getAllOpenOffers(){
+        try{
+            List<GetOfferDTO> getOfferDTOS = new ArrayList<>();
+            offerService.getAllOpenOffers().forEach(x-> getOfferDTOS.add(OfferMapper.offerToGetDto(x)));
+            return getOfferDTOS;
+        }catch (Exception unexpected){
+            unexpected.printStackTrace();
+            throw new ApiInternalProcessingException("Internal Error while handling request", unexpected);
+        }
+    }
+
+    @PostMapping("/offer")
     @ResponseStatus(HttpStatus.CREATED)
-    public OfferDTO createOffer(@Valid @RequestBody OfferDTO offerDTO){
+    public GetOfferDTO createOffer(@Valid @RequestBody PostOfferDTO getOfferDTO){
         try{
-            Offer offer = OfferMapper.dtoToOffer(offerDTO);
-            offer.setUser(userService.getUserByUUID(offer.getUserUUID()));
-            return OfferMapper.offerToDto(offerService.saveOffer(offer));
-        }catch (Exception e){
-            throw new ApiInternalProcessingException("Internal Error while handling request", e);
+            return OfferMapper.offerToGetDto(offerService.saveOffer(getOfferDTO));
+        }catch (NoSuchUserException expected){
+            expected.printStackTrace();
+            throw expected;
+        }catch (Exception unexpected){
+            unexpected.printStackTrace();
+            throw new ApiInternalProcessingException("Internal Error while handling request", unexpected);
         }
     }
 
-    @GetMapping("/offering")
-    @ResponseStatus(HttpStatus.OK)
-    public OfferList getOffersByUuid(@Valid @RequestParam String uuid){
-        try{
-            OfferList offerList = new OfferList();
-            offerList.setOfferList(offerService.getOffersByUuid(uuid));
-            return offerList;
-        }catch (Exception e){
-            throw new ApiInternalProcessingException("Internal Error while handling request", e);
-        }
-    }
-
-    @GetMapping("/offeringSearch")
-    @ResponseStatus(HttpStatus.OK)
-    public OfferList getOffersByName(@Valid @RequestParam String mealName){
-        try{
-            OfferList offerList = new OfferList();
-            offerList.setOfferList(offerService.getAllOfferByName(mealName));
-            return offerList;
-        }catch (Exception e){
-            throw new ApiInternalProcessingException("Internal Error while handling request", e);
-        }
-    }
-
-    @GetMapping("/offeringAll")
-    @ResponseStatus(HttpStatus.OK)
-    public OfferList getAllOffers(){
-        try{
-            OfferList offerList = new OfferList();
-            offerList.setOfferList(offerService.getAllOffers());
-            return offerList;
-        }catch (Exception e){
-            throw new ApiInternalProcessingException("Internal Error while handling request", e);
-        }
-    }
-
-    @PostMapping("/offeringDelete")
-    @ResponseStatus(HttpStatus.OK)
-    public Offer deleteOffer(@Valid @RequestBody Offer offer){
-        try{
-            return offerService.deleteOffer(offer);
-        }catch (Exception e){
-            throw new ApiInternalProcessingException("Internal Error while handling request", e);
+    @DeleteMapping("/offer")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteOffer(@Valid @PathVariable @NotNull long id) {
+        try {
+            offerService.deleteOffer(id);
+        }catch (NoSuchOfferException expected){
+            expected.printStackTrace();
+            throw expected;
+        }catch (Exception unexpected){
+            unexpected.printStackTrace();
+            throw new ApiInternalProcessingException("Internal Error while handling request", unexpected);
         }
     }
 }

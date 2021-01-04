@@ -1,9 +1,9 @@
 package at.ac.campuswien.fh.foodsy.foodsy_backend.controller;
 
-import at.ac.campuswien.fh.foodsy.foodsy_backend.exception.ApiInternalProcessingException;
-import at.ac.campuswien.fh.foodsy.foodsy_backend.model.Ordering;
-import at.ac.campuswien.fh.foodsy.foodsy_backend.model.OrderingList;
-import at.ac.campuswien.fh.foodsy.foodsy_backend.service.OfferService;
+import at.ac.campuswien.fh.foodsy.foodsy_backend.controller.dto.input.PostOrderingDTO;
+import at.ac.campuswien.fh.foodsy.foodsy_backend.controller.dto.output.GetOrderingDTO;
+import at.ac.campuswien.fh.foodsy.foodsy_backend.controller.mapper.OrderMapper;
+import at.ac.campuswien.fh.foodsy.foodsy_backend.exception.*;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +11,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.List;
 
 @Validated
@@ -20,38 +23,44 @@ public class OrderController {
     @Autowired
     OrderService orderService;
 
-    @Autowired
-    OfferService offerService;
-
     @PostMapping("/ordering")
     @ResponseStatus(HttpStatus.CREATED)
-    public Ordering createOrder(@Valid @RequestBody Ordering ordering){
-        try{
-            return orderService.saveOrder(ordering);
-        }catch (Exception e){
-            throw new ApiInternalProcessingException("Internal Error while handling request", e);
+    public GetOrderingDTO createOrder(@Valid @RequestBody PostOrderingDTO postOrderingDTO) {
+        try {
+            return OrderMapper.orderingToGetDTO(orderService.saveOrder(postOrderingDTO));
+        } catch (NoSuchUserException | NoSuchOfferException | OfferIsAlreadyOrderedException expected) {
+            expected.printStackTrace();
+            throw expected;
+        } catch (Exception unexpected) {
+            unexpected.printStackTrace();
+            throw new ApiInternalProcessingException("Internal Error while handling request", unexpected);
         }
     }
 
     @GetMapping("/ordering")
     @ResponseStatus(HttpStatus.OK)
-    public OrderingList getAllOrders(@Valid @RequestParam String uuid){
+    public List<GetOrderingDTO> getAllOrders(@Valid @NotNull @Size(min = 36, max = 36) @RequestParam String uuid) {
         try {
-            OrderingList orderingList = new OrderingList();
-            orderingList.setOrderingList(orderService.getOrdersWithOffer(offerService.getAllOffers(), orderService.getOrders(uuid)));
-            return orderingList;
-        }catch (Exception e){
-            throw new ApiInternalProcessingException("Internal Error while handling request", e);
+            List<GetOrderingDTO> getOrderingDTOS = new ArrayList<>();
+            orderService.getOrders(uuid).forEach(x -> getOrderingDTOS.add(OrderMapper.orderingToGetDTO(x)));
+            return getOrderingDTOS;
+        } catch (Exception unexpected) {
+            unexpected.printStackTrace();
+            throw new ApiInternalProcessingException("Internal Error while handling request", unexpected);
         }
     }
 
-    @PostMapping("/orderingDelete")
-    @ResponseStatus(HttpStatus.OK)
-    public Ordering deleteOrder(@Valid @RequestBody Ordering ordering){
-        try{
-            return orderService.deleteOrder(ordering);
-        }catch (Exception e){
-            throw new ApiInternalProcessingException("Internal Error while handling request", e);
+    @DeleteMapping("/ordering/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteOrder(@Valid @PathVariable @NotNull long id) {
+        try {
+            orderService.deleteOrder(id);
+        } catch (NoSuchOrderException expected) {
+            expected.printStackTrace();
+            throw expected;
+        } catch (Exception unexpected) {
+            unexpected.printStackTrace();
+            throw new ApiInternalProcessingException("Internal Error while handling request", unexpected);
         }
     }
 }

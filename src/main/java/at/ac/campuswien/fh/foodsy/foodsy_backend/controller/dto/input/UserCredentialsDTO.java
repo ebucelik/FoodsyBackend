@@ -1,12 +1,14 @@
-package at.ac.campuswien.fh.foodsy.foodsy_backend.controller.dto;
+package at.ac.campuswien.fh.foodsy.foodsy_backend.controller.dto.input;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+@Valid
 public class UserCredentialsDTO {
     @NotNull
-    String username;
+    private String username;
     @NotNull
-    String password;
+    private String password;
 
     public UserCredentialsDTO(String username, String password) {
         this.username = username;

@@ -1,5 +1,7 @@
 package at.ac.campuswien.fh.foodsy.foodsy_backend.model;
 
+import org.hibernate.criterion.Order;
+
 import java.io.Serializable;
 import javax.persistence.*;
 
@@ -11,21 +13,35 @@ public class Review implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private long id;
-    @Column(name = "REVIEWED_ID")
-    private String reviewedId;
-    @Column(name = "ORDER_ID")
-    private String orderId;
     @Column(name = "REVIEW_POINTS")
     private Integer reviewPoints;
     @Column(name = "REVIEW_TEXT")
     private String reviewText;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "FK_ORDER_ID", nullable = false)
+    private Ordering ordering;
 
     public Review() {}
 
-    public Review(String reviewedId, String orderId, Integer reviewPoints, String reviewText) {
-        this.reviewedId = reviewedId;
-        this.orderId = orderId;
+    public Review(Integer reviewPoints, String reviewText, Ordering ordering) {
         this.reviewPoints = reviewPoints;
+        this.reviewText = reviewText;
+        this.ordering = ordering;
+    }
+
+    public Integer getReviewPoints() {
+        return reviewPoints;
+    }
+
+    public void setReviewPoints(Integer reviewPoints) {
+        this.reviewPoints = reviewPoints;
+    }
+
+    public String getReviewText() {
+        return reviewText;
+    }
+
+    public void setReviewText(String reviewText) {
         this.reviewText = reviewText;
     }
 
@@ -37,20 +53,11 @@ public class Review implements Serializable {
         this.id = id;
     }
 
-    public String getReviewedId() {
-        return reviewedId;
+    public Ordering getOrdering() {
+        return ordering;
     }
 
-    public String getOrderId() {
-        return orderId;
+    public void setOrdering(Ordering ordering) {
+        this.ordering = ordering;
     }
-
-    public Integer getReviewPoints() {
-        return reviewPoints;
-    }
-
-    public String getReviewText() {
-        return reviewText;
-    }
-
 }

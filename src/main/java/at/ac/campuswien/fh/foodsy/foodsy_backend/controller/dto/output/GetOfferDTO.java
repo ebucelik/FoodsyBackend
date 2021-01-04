@@ -1,44 +1,48 @@
-package at.ac.campuswien.fh.foodsy.foodsy_backend.model;
+package at.ac.campuswien.fh.foodsy.foodsy_backend.controller.dto.output;
 
-import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
-@Entity
-@Table(name = "OFFER")
-public class Offer implements Serializable {
+@Valid
+public class GetOfferDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID")
+    @NotNull
     private long id;
-    @Column(name = "MEALNAME")
+    @NotNull
     private String mealName;
-    @Column(name = "CATEGORY")
+    @NotNull
     private String category;
-    @Column(name = "AREA")
+    @NotNull
     private String area;
-    @Column(name = "ENCODED_IMAGE", columnDefinition = "TEXT")
+    @NotNull
     private String encodedImage;
-    @Column(name = "INGREDIENTS")
+    @NotNull
     private String ingredients;
-    @Column(name = "TIMESTAMP")
-    private Date timestamp;
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "FK_USER_ID", nullable = false)
-    private User user;
+    @NotNull
+    private Date currentTimestamp;
+    @NotNull
+    private GetUserDTO user;
 
-    public Offer() {
-    }
-
-    public Offer(String mealName, String category, String area, String encodedImage, String ingredients, Date timestamp, User user) {
+    public GetOfferDTO(@NotNull long id, @NotNull String mealName, @NotNull String category, @NotNull String area,
+                       @NotNull String encodedImage, @NotNull String ingredients, @NotNull Date currentTimestamp,
+                       @NotNull GetUserDTO user) {
+        this.id = id;
         this.mealName = mealName;
         this.category = category;
         this.area = area;
         this.encodedImage = encodedImage;
         this.ingredients = ingredients;
-        this.timestamp = timestamp;
+        this.currentTimestamp = currentTimestamp;
         this.user = user;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getMealName() {
@@ -81,27 +85,19 @@ public class Offer implements Serializable {
         this.ingredients = ingredients;
     }
 
-    public Date getTimestamp() {
-        return timestamp;
+    public Date getCurrentTimestamp() {
+        return currentTimestamp;
     }
 
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
+    public void setCurrentTimestamp(Date currentTimestamp) {
+        this.currentTimestamp = currentTimestamp;
     }
 
-    public User getUser() {
+    public GetUserDTO getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(GetUserDTO user) {
         this.user = user;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 }

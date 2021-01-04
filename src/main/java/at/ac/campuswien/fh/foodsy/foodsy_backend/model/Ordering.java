@@ -11,27 +11,41 @@ public class Ordering implements Serializable{
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private long id;
-    @Column(name = "ORDERING_UUID")
-    private String orderingUuid;
-    @Column(name = "OFFERING_UUID")
-    private String offeringUuid;
-    @Column(name = "OFFER_ID")
-    private long offeringId;
-    @Column(name = "OFFER")
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "FK_OFFER_ID", unique = true, nullable = false)
     private Offer offer;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "FK_USER_ID", nullable = false)
+    private User user;
 
     public Ordering(){}
 
-    public Ordering(String orderingUuid, String offeringUuid, long offeringId){
-        this.orderingUuid = orderingUuid;
-        this.offeringUuid = offeringUuid;
-        this.offeringId = offeringId;
+    public Ordering(Offer offer, User user) {
+        this.offer = offer;
+        this.user = user;
     }
 
-    public String getOrderingUuid(){return this.orderingUuid;}
-    public String getOfferingUuid(){return this.offeringUuid;}
-    public long getOfferingId(){return this.offeringId;}
-    public long getId(){return this.id;}
-    public Offer getOffer(){return this.offer;}
-    public void setOffer(Offer offer){this.offer = offer;}
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Offer getOffer() {
+        return offer;
+    }
+
+    public void setOffer(Offer offer) {
+        this.offer = offer;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

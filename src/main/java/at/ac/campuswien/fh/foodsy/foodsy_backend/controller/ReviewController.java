@@ -1,6 +1,10 @@
 package at.ac.campuswien.fh.foodsy.foodsy_backend.controller;
 
+import at.ac.campuswien.fh.foodsy.foodsy_backend.controller.dto.input.PostReviewDTO;
+import at.ac.campuswien.fh.foodsy.foodsy_backend.controller.mapper.ReviewMapper;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.exception.ApiInternalProcessingException;
+import at.ac.campuswien.fh.foodsy.foodsy_backend.exception.NoSuchOrderException;
+import at.ac.campuswien.fh.foodsy.foodsy_backend.exception.NoSuchUserException;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.model.Review;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,41 +13,37 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Validated
 @RestController
 public class ReviewController {
-    
+
     @Autowired
     ReviewService reviewService;
 
     @PostMapping("/review")
     @ResponseStatus(HttpStatus.CREATED)
-    public Review createReview(@Valid @RequestBody Review review){
-        try{
-            return reviewService.reviewOrder(review);
-        }catch (Exception e){
-            throw new ApiInternalProcessingException("Something went wrong.");
-        }
-    }
-
-    @GetMapping("/review")
-    @ResponseStatus(HttpStatus.OK)
-    public List<Review> getAllReviews(){
-        try{
-            return reviewService.getAllReviews();
-        }catch (Exception e){
-            throw new ApiInternalProcessingException("Something went wrong.");
+    public void createReview(@Valid @RequestBody PostReviewDTO postReviewDTO) {
+        try {
+            reviewService.reviewOrder(postReviewDTO);
+        } catch (NoSuchOrderException expected) {
+            expected.printStackTrace();
+            throw expected;
+        } catch (Exception unexpected) {
+            unexpected.printStackTrace();
+            throw new ApiInternalProcessingException("Something went wrong.", unexpected);
         }
     }
 
     @GetMapping("/reviewAverage")
     @ResponseStatus(HttpStatus.OK)
-    public long getAverageReviewPoints(@Valid @RequestParam String uuid){
-        try{
+    public long getAverageReviewPoints(@Valid @NotNull @Size(min = 36, max = 36) @RequestParam String uuid) {
+        try {
             return reviewService.getAverageReviewPoint(uuid);
-        }catch (Exception e){
+        } catch (Exception unexpected) {
+            unexpected.printStackTrace();
             throw new ApiInternalProcessingException("Something went wrong.");
         }
     }

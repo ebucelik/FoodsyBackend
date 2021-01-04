@@ -1,9 +1,11 @@
 package at.ac.campuswien.fh.foodsy.foodsy_backend.controller;
 
-import at.ac.campuswien.fh.foodsy.foodsy_backend.controller.dto.UserDTO;
+import at.ac.campuswien.fh.foodsy.foodsy_backend.controller.dto.input.PostUserDTO;
+import at.ac.campuswien.fh.foodsy.foodsy_backend.controller.dto.output.GetUserDTO;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.controller.mapper.UserMapper;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.exception.*;
-import at.ac.campuswien.fh.foodsy.foodsy_backend.controller.dto.UserCredentialsDTO;
+import at.ac.campuswien.fh.foodsy.foodsy_backend.controller.dto.input.UserCredentialsDTO;
+import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -23,44 +25,36 @@ public class UserController {
 
     @GetMapping("/user")
     @ResponseStatus(HttpStatus.OK)
-    public UserDTO getUser(@Valid @NotNull @Size(min = 36, max = 36) @RequestParam String userUUID) {
+    public GetUserDTO getUser(@Valid @NotNull @Size(min = 36, max = 36) @RequestParam String userUUID) {
         try {
-            return UserMapper.userToDTO(userService.getUserByUUID(userUUID));
+            return UserMapper.userToGetDTO(userService.getUserByUUID(userUUID));
         } catch (NoSuchUserException expected) {
+            expected.printStackTrace();
             throw expected;
         } catch (Exception unexpected) {
+            unexpected.printStackTrace();
             throw new ApiInternalProcessingException("Internal Error while handling request", unexpected);
         }
     }
 
     @PostMapping("/user")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDTO createUser(@Valid @RequestBody UserDTO userDTO) {
+    public GetUserDTO createUser(@Valid @RequestBody PostUserDTO postUserDTO) {
         try {
-            if (userDTO.getUserUUID() != null) {
-                throw new IllegalArgumentException("Post can only be called without UUID!");
-            }
-            return UserMapper.userToDTO(userService.saveUser(UserMapper.dtoToUser(userDTO)));
+            return UserMapper.userToGetDTO(userService.saveUser(UserMapper.postDtoToUser(postUserDTO)));
         } catch (IllegalArgumentException | UsernameAlreadyExistsException expected) {
+            expected.printStackTrace();
             throw expected;
         } catch (Exception unexpected) {
+            unexpected.printStackTrace();
             throw new ApiInternalProcessingException("Internal Error while handling request", unexpected);
         }
     }
 
     @PutMapping("/user")
-    @ResponseStatus(HttpStatus.CREATED)
-    public UserDTO updateUser(@Valid @RequestBody UserDTO userDTO) {
-        try {
-            if (userDTO.getUserUUID() == null || userDTO.getUserUUID().isEmpty()) {
-                throw new UserUpdateNotPossibleException("Update only with specified UUID!");
-            }
-            return UserMapper.userToDTO(userService.updateUser(UserMapper.dtoToUser(userDTO)));
-        } catch (UserUpdateNotPossibleException | UsernameAlreadyExistsException expected) {
-            throw expected;
-        } catch (Exception unexpected) {
-            throw new ApiInternalProcessingException("Internal Error while handling request", unexpected);
-        }
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public GetUserDTO updateUser(@Valid @RequestBody PostUserDTO postUserDTO) {
+        throw new NotYetImplementedException("Not yet implemented");
     }
 
     @PutMapping("/login")
@@ -69,8 +63,10 @@ public class UserController {
         try {
             return userService.loginByCredentials(userCredentialsDTO.getUsername(), userCredentialsDTO.getPassword());
         } catch (UserCredentialsNotAuthorizedException expected) {
+            expected.printStackTrace();
             throw expected;
         } catch (Exception unexpected) {
+            unexpected.printStackTrace();
             throw new ApiInternalProcessingException("Internal Error while handling request", unexpected);
         }
     }
