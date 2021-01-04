@@ -6,6 +6,7 @@ import at.ac.campuswien.fh.foodsy.foodsy_backend.controller.mapper.OfferMapper;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.exception.ApiInternalProcessingException;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.exception.NoSuchOfferException;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.exception.NoSuchUserException;
+import at.ac.campuswien.fh.foodsy.foodsy_backend.model.OfferList;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.service.OfferService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,11 +28,12 @@ public class OfferController {
 
     @GetMapping(value = "/offer", params = {"uuid"})
     @ResponseStatus(HttpStatus.OK)
-    public List<GetOfferDTO> getOffersByUuid(@Valid @NotNull @Size(min = 36, max = 36) @RequestParam String uuid){
+    public OfferList getOffersByUuid(@Valid @NotNull @Size(min = 36, max = 36) @RequestParam String uuid){
         try{
             List<GetOfferDTO> getOfferDTOS = new ArrayList<>();
             offerService.getOffersByUuid(uuid).forEach(x-> getOfferDTOS.add(OfferMapper.offerToGetDto(x)));
-            return getOfferDTOS;
+
+            return new OfferList(getOfferDTOS);
         }catch (Exception unexpected){
             unexpected.printStackTrace();
             throw new ApiInternalProcessingException("Internal Error while handling request", unexpected);
@@ -40,11 +42,12 @@ public class OfferController {
 
     @GetMapping(value = "/offer", params = {"mealName"})
     @ResponseStatus(HttpStatus.OK)
-    public List<GetOfferDTO> getOpenOffersByName(@Valid @NotNull @RequestParam String mealName){
+    public OfferList getOpenOffersByName(@Valid @NotNull @RequestParam String mealName){
         try{
             List<GetOfferDTO> getOfferDTOS = new ArrayList<>();
             offerService.getAllOpenOfferByName(mealName).forEach(x-> getOfferDTOS.add(OfferMapper.offerToGetDto(x)));
-            return getOfferDTOS;
+
+            return new OfferList(getOfferDTOS);
         }catch (Exception unexpected){
             unexpected.printStackTrace();
             throw new ApiInternalProcessingException("Internal Error while handling request", unexpected);
@@ -53,11 +56,12 @@ public class OfferController {
 
     @GetMapping(value = "/offer", params = {})
     @ResponseStatus(HttpStatus.OK)
-    public List<GetOfferDTO> getAllOpenOffers(){
+    public OfferList getAllOpenOffers(){
         try{
             List<GetOfferDTO> getOfferDTOS = new ArrayList<>();
             offerService.getAllOpenOffers().forEach(x-> getOfferDTOS.add(OfferMapper.offerToGetDto(x)));
-            return getOfferDTOS;
+
+            return new OfferList(getOfferDTOS);
         }catch (Exception unexpected){
             unexpected.printStackTrace();
             throw new ApiInternalProcessingException("Internal Error while handling request", unexpected);

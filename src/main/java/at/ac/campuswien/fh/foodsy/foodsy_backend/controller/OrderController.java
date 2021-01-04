@@ -4,6 +4,7 @@ import at.ac.campuswien.fh.foodsy.foodsy_backend.controller.dto.input.PostOrderi
 import at.ac.campuswien.fh.foodsy.foodsy_backend.controller.dto.output.GetOrderingDTO;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.controller.mapper.OrderMapper;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.exception.*;
+import at.ac.campuswien.fh.foodsy.foodsy_backend.model.OrderList;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,11 +40,12 @@ public class OrderController {
 
     @GetMapping("/ordering")
     @ResponseStatus(HttpStatus.OK)
-    public List<GetOrderingDTO> getAllOrders(@Valid @NotNull @Size(min = 36, max = 36) @RequestParam String uuid) {
+    public OrderList getAllOrders(@Valid @NotNull @Size(min = 36, max = 36) @RequestParam String uuid) {
         try {
             List<GetOrderingDTO> getOrderingDTOS = new ArrayList<>();
             orderService.getOrders(uuid).forEach(x -> getOrderingDTOS.add(OrderMapper.orderingToGetDTO(x)));
-            return getOrderingDTOS;
+
+            return new OrderList(getOrderingDTOS);
         } catch (Exception unexpected) {
             unexpected.printStackTrace();
             throw new ApiInternalProcessingException("Internal Error while handling request", unexpected);
