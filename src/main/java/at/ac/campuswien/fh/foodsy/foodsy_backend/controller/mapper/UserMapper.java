@@ -1,17 +1,18 @@
 package at.ac.campuswien.fh.foodsy.foodsy_backend.controller.mapper;
 
-import at.ac.campuswien.fh.foodsy.foodsy_backend.controller.dto.UserDTO;
+import at.ac.campuswien.fh.foodsy.foodsy_backend.controller.dto.input.PostUserDTO;
+import at.ac.campuswien.fh.foodsy.foodsy_backend.controller.dto.output.GetUserDTO;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.model.User;
 
 public class UserMapper {
 
     private UserMapper(){}
 
-    public static User dtoToUser(UserDTO userDTO){
-        return new User(userDTO.getUserUUID(),userDTO.getUsername(),userDTO.getFirstname(),userDTO.getSurname(),userDTO.getPassword());
+    public static User postDtoToUser(PostUserDTO postUserDTO){
+        return new User(null, postUserDTO.getUsername(), postUserDTO.getFirstname(), postUserDTO.getSurname(), postUserDTO.getPassword(), postUserDTO.getProfileImage());
     }
 
-    public static UserDTO userToDTO(User user){
-        return new UserDTO(user.getUserUUID(),user.getUsername(),user.getFirstname(),user.getSurname(),null);
+    public static GetUserDTO userToGetDTO(User user){
+        return new GetUserDTO(user.getUserUUID(), user.getUsername(),user.getFirstname(),user.getSurname(),user.getProfileImage());
     }
 }

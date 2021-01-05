@@ -20,5 +20,8 @@
         -->
         <property name="hbm2ddl.auto">update</property>
         <mapping class="at.ac.campuswien.fh.foodsy.foodsy_backend.model.User"/>
+        <mapping class="at.ac.campuswien.fh.foodsy.foodsy_backend.model.Offer"/>
+        <mapping class="at.ac.campuswien.fh.foodsy.foodsy_backend.model.Ordering"/>
+        <mapping class="at.ac.campuswien.fh.foodsy.foodsy_backend.model.Review"/>
     </session-factory>
 </hibernate-configuration>

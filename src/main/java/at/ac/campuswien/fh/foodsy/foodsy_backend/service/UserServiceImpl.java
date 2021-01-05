@@ -1,19 +1,27 @@
 package at.ac.campuswien.fh.foodsy.foodsy_backend.service;
 
+import at.ac.campuswien.fh.foodsy.foodsy_backend.exception.NoSuchUserException;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.model.User;
-import at.ac.campuswien.fh.foodsy.foodsy_backend.repository.UserDaoImpl;
+import at.ac.campuswien.fh.foodsy.foodsy_backend.repository.UserDao;
+import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.Optional;
 
 @Service
-public class UserServiceImpl implements UserServie {
+public class UserServiceImpl implements UserService {
 
     @Autowired
-    UserDaoImpl userDao;
+    private UserDao userDao;
 
     @Override
     public User getUserByUUID(String userUUID){
-        return userDao.getUUID(userUUID);
+        Optional<User> user = userDao.getUUID(userUUID);
+        if(user.isPresent()){
+            return  user.get();
+        }else{
+            throw new NoSuchUserException("No User with this UUID");
+        }
     }
 
     @Override
@@ -28,7 +36,7 @@ public class UserServiceImpl implements UserServie {
 
     @Override
     public User updateUser(User user){
-        return userDao.update(user);
+        throw new NotYetImplementedException();
     }
     @Override
     public void deleteUser(User user){

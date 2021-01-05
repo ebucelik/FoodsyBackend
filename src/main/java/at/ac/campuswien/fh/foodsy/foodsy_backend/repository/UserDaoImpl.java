@@ -1,10 +1,10 @@
 package at.ac.campuswien.fh.foodsy.foodsy_backend.repository;
 
+import java.util.Optional;
 import java.util.UUID;
 import javax.persistence.NoResultException;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.exception.NoSuchUserException;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.exception.UserCredentialsNotAuthorizedException;
-import at.ac.campuswien.fh.foodsy.foodsy_backend.exception.UserUpdateNotPossibleException;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.exception.UsernameAlreadyExistsException;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.model.User;
 import org.hibernate.Session;
@@ -15,24 +15,25 @@ import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class UserDaoImpl implements Dao<User> {
+public class UserDaoImpl implements UserDao {
 
     SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 
     static Session sessionObj;
-    private static final String READ_BY_UUID = "SELECT u FROM User u WHERE u.userUUID = ?0";
-    private static final String READ_BY_USERNAME_PW = "SELECT u FROM User u WHERE u.username = ?0 AND u.password =?1";
-    private static final String READ_BY_USERNAME = "SELECT u FROM User u WHERE u.username = ?0";
-    private static final String READ_BY_ID = "SELECT u FROM User u WHERE u.id = ?0";
+    private static final String READ_BY_UUID = "SELECT distinct u FROM User u WHERE u.userUUID = ?0";
+    private static final String READ_BY_USERNAME_PW = "SELECT distinct u FROM User u WHERE u.username = ?0 AND u.password =?1";
+    private static final String READ_BY_USERNAME = "SELECT distinct u FROM User u WHERE u.username = ?0";
+    private static final String READ_BY_ID = "SELECT distinct u FROM User u WHERE u.id = ?0";
 
-    public User getUUID(String uuid) {
+    @Override
+    public Optional<User> getUUID(String uuid) {
         try {
             sessionObj = sessionFactory.openSession();
             Query<User> getUserByParamQuery = sessionObj.createQuery(READ_BY_UUID);
             getUserByParamQuery.setParameter(0, uuid);
-            return getUserByParamQuery.getSingleResult();
+            return Optional.of(getUserByParamQuery.getSingleResult());
         }  catch (NoResultException nre) {
-            throw new NoSuchUserException("No User with this UUID", nre);
+            return Optional.empty();
         }catch (Exception e) {
             throw e;
         } finally {
@@ -42,6 +43,7 @@ public class UserDaoImpl implements Dao<User> {
         }
     }
 
+    @Override
     public String getUUID(String username, String password) {
         try {
             sessionObj = sessionFactory.openSession();
@@ -63,7 +65,7 @@ public class UserDaoImpl implements Dao<User> {
     @Override
     public User save(User user) {
         try {
-            if(existsUser(user.getUsername())){
+            if(existsUserWithUsername(user.getUsername())){
                 throw new UsernameAlreadyExistsException("Username taken");
             }
             user.setUserUUID(UUID.randomUUID().toString());
@@ -71,7 +73,7 @@ public class UserDaoImpl implements Dao<User> {
             sessionObj.beginTransaction();
             long savedId = (long) sessionObj.save(user);
             sessionObj.getTransaction().commit();
-            return get(savedId);
+            return get(savedId).orElse(null);
         } catch (Exception e) {
             if (null != sessionObj.getTransaction()) {
                 sessionObj.getTransaction().rollback();
@@ -86,46 +88,30 @@ public class UserDaoImpl implements Dao<User> {
 
     @Override
     public User update(User updated) {
-        try {
-            User current = getUUID(updated.getUserUUID());
-            if(current == null){
+        //TODO finish
+            Optional<User> current = getUUID(updated.getUserUUID());
+            if(!current.isPresent()){
                 throw new NoSuchUserException("No User with this UUID");
             }
-            if(!current.getUsername().equals(updated.getUsername()) && existsUser(updated.getUsername())){
+            if(!current.get().getUsername().equals(updated.getUsername()) && existsUserWithUsername(updated.getUsername())){
                 throw new UsernameAlreadyExistsException("Username already exists.");
             }
-                updated.setId(current.getId());
-            sessionObj = sessionFactory.openSession();
-            sessionObj.beginTransaction();
-            sessionObj.update(updated);
-            sessionObj.getTransaction().commit();
-            return getUUID(updated.getUserUUID());
-        } catch (UsernameAlreadyExistsException e) {
-            if (null != sessionObj.getTransaction()) {
-                sessionObj.getTransaction().rollback();
-            }
-            throw e;
-        } catch (Exception e) {
-            if (null != sessionObj.getTransaction()) {
-                sessionObj.getTransaction().rollback();
-            }
-            throw new UserUpdateNotPossibleException("Update Failed",e);
-        } finally {
-            if (sessionObj != null) {
-                sessionObj.close();
-            }
-        }
+            throw new NotYetImplementedException();
     }
 
     @Override
-    public  User get(long id) {
+    public void delete(User user) {
+        throw new NotYetImplementedException();
+    }
+
+    private Optional<User> get(long id) {
         try {
             sessionObj = sessionFactory.openSession();
             Query<User> getAllUsersQuery = sessionObj.createQuery(READ_BY_ID);
             getAllUsersQuery.setParameter(0, id);
-            return getAllUsersQuery.getSingleResult();
+            return Optional.of(getAllUsersQuery.getSingleResult());
         } catch (NoResultException nre) {
-            return null;
+            return Optional.empty();
         } catch (Exception e) {
             throw e;
         } finally {
@@ -135,7 +121,7 @@ public class UserDaoImpl implements Dao<User> {
         }
     }
 
-    private boolean existsUser(String username) {
+    private boolean existsUserWithUsername(String username) {
         try {
             sessionObj = sessionFactory.openSession();
             Query<User> getUserByUsernamePw = sessionObj.createQuery(READ_BY_USERNAME);
@@ -150,10 +136,5 @@ public class UserDaoImpl implements Dao<User> {
                 sessionObj.close();
             }
         }
-    }
-
-    @Override
-    public void delete(User user) {
-        throw new NotYetImplementedException();
     }
 }

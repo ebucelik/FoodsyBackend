@@ -12,7 +12,7 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private long id;
-    @Column(name="USER_UUID")
+    @Column(name="USER_UUID", unique = true)
     private String userUUID;
     @Column(name="USERNAME")
     private String username;
@@ -22,15 +22,18 @@ public class User implements Serializable {
     private String surname;
     @Column(name="PASSWORD")
     private String password;
+    @Column(name = "ENCODEDIMAGE", columnDefinition = "TEXT")
+    private String profileImage;
 
     public User() {}
 
-    public User(String userUUID, String username, String firstname, String surname, String password) {
+    public User(String userUUID, String username, String firstname, String surname, String password, String profileImage) {
         this.userUUID = userUUID;
         this.username = username;
         this.firstname = firstname;
         this.surname = surname;
         this.password = password;
+        this.profileImage = profileImage;
     }
 
     public long getId() {
@@ -56,6 +59,8 @@ public class User implements Serializable {
     public String getPassword() {
         return password;
     }
+
+    public String getProfileImage(){return  profileImage;}
 
     public void setUserUUID(String userUUID) {
         this.userUUID = userUUID;
