@@ -92,7 +92,7 @@ public class OfferController {
             throw expected;
         }catch (Exception unexpected){
             unexpected.printStackTrace();
-            throw new ApiInternalProcessingException("Internal Error while handling request", unexpected);
+            throw new ApiInternalProcessingException("Internal Error who handling request", unexpected);
         }
     }
 }
