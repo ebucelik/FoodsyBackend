@@ -24,6 +24,8 @@ public class Offer implements Serializable {
     private String ingredients;
     @Column(name = "TIMESTAMP")
     private Date timestamp;
+    //@Column(name = "PRICE")
+    //private double price;
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "FK_USER_ID", nullable = false)
     private User user;
@@ -38,6 +40,7 @@ public class Offer implements Serializable {
         this.encodedImage = encodedImage;
         this.ingredients = ingredients;
         this.timestamp = timestamp;
+        //this.price = price;
         this.user = user;
     }
 
