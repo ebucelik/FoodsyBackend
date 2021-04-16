@@ -22,11 +22,13 @@ public class GetOfferDTO {
     @NotNull
     private Date currentTimestamp;
     @NotNull
+    private double price;
+    @NotNull
     private GetUserDTO user;
 
     public GetOfferDTO(@NotNull long id, @NotNull String mealName, @NotNull String category, @NotNull String area,
                        @NotNull String encodedImage, @NotNull String ingredients, @NotNull Date currentTimestamp,
-                       @NotNull GetUserDTO user) {
+                       @NotNull double price, @NotNull GetUserDTO user) {
         this.id = id;
         this.mealName = mealName;
         this.category = category;
@@ -34,6 +36,7 @@ public class GetOfferDTO {
         this.encodedImage = encodedImage;
         this.ingredients = ingredients;
         this.currentTimestamp = currentTimestamp;
+        this.price = price;
         this.user = user;
     }
 

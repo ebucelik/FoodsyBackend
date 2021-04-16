@@ -49,7 +49,7 @@ public class OfferServiceImpl implements OfferService{
         return offerDao.save(new Offer(postOfferDTO.getMealName(),
                 postOfferDTO.getCategory(),postOfferDTO.getArea(),
                 postOfferDTO.getEncodedImage(),postOfferDTO.getIngredients(),
-                postOfferDTO.getTimestamp(),user.get()));
+                postOfferDTO.getTimestamp(), postOfferDTO.getPrice(), user.get()));
     }
 
     @Override

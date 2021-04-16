@@ -16,6 +16,8 @@ public class OfferMapper {
                 offer.getArea(),
                 offer.getEncodedImage(),
                 offer.getIngredients(),
-                offer.getTimestamp(), UserMapper.userToGetDTO(offer.getUser()));
+                offer.getTimestamp(),
+                offer.getPrice(),
+                UserMapper.userToGetDTO(offer.getUser()));
     }
 }

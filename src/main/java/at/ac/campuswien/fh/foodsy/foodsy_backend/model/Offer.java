@@ -24,8 +24,8 @@ public class Offer implements Serializable {
     private String ingredients;
     @Column(name = "TIMESTAMP")
     private Date timestamp;
-    //@Column(name = "PRICE")
-    //private double price;
+    @Column(name = "PRICE", precision = 2)
+    private double price;
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "FK_USER_ID", nullable = false)
     private User user;
@@ -33,14 +33,14 @@ public class Offer implements Serializable {
     public Offer() {
     }
 
-    public Offer(String mealName, String category, String area, String encodedImage, String ingredients, Date timestamp, User user) {
+    public Offer(String mealName, String category, String area, String encodedImage, String ingredients, Date timestamp, double price, User user) {
         this.mealName = mealName;
         this.category = category;
         this.area = area;
         this.encodedImage = encodedImage;
         this.ingredients = ingredients;
         this.timestamp = timestamp;
-        //this.price = price;
+        this.price = price;
         this.user = user;
     }
 
@@ -48,53 +48,31 @@ public class Offer implements Serializable {
         return mealName;
     }
 
-    public void setMealName(String mealName) {
-        this.mealName = mealName;
-    }
-
     public String getCategory() {
         return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
     }
 
     public String getArea() {
         return area;
     }
 
-    public void setArea(String area) {
-        this.area = area;
-    }
-
     public String getEncodedImage() {
         return encodedImage;
-    }
-
-    public void setEncodedImage(String encodedImage) {
-        this.encodedImage = encodedImage;
     }
 
     public String getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(String ingredients) {
-        this.ingredients = ingredients;
-    }
-
     public Date getTimestamp() {
         return timestamp;
-    }
-
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
     }
 
     public User getUser() {
         return user;
     }
+
+    public double getPrice(){return this.price;}
 
     public void setUser(User user) {
         this.user = user;

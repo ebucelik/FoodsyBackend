@@ -20,19 +20,22 @@ public class PostOfferDTO {
     private String ingredients;
     @NotNull
     private Date timestamp;
+    @NotNull
+    private double price;
     @Size(min = 36, max = 36)
     @NotNull
     private String userUUID;
 
     public PostOfferDTO(@NotNull String mealName, @NotNull String category, @NotNull String area,
                         @NotNull String encodedImage, @NotNull String ingredients, @NotNull Date timestamp,
-                        @Size(min = 36, max = 36) @NotNull String userUUID) {
+                        @NotNull double price, @Size(min = 36, max = 36) @NotNull String userUUID) {
         this.mealName = mealName;
         this.category = category;
         this.area = area;
         this.encodedImage = encodedImage;
         this.ingredients = ingredients;
         this.timestamp = timestamp;
+        this.price = price;
         this.userUUID = userUUID;
     }
 
@@ -83,6 +86,8 @@ public class PostOfferDTO {
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }
+
+    public double getPrice(){return this.price;}
 
     public String getUserUUID() {
         return userUUID;
