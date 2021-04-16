@@ -2,6 +2,8 @@ package at.ac.campuswien.fh.foodsy.foodsy_backend.service;
 
 import at.ac.campuswien.fh.foodsy.foodsy_backend.controller.dto.input.PostReviewDTO;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.model.Review;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 public interface ReviewService {

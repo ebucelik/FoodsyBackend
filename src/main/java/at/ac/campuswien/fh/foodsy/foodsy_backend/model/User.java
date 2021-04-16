@@ -4,10 +4,11 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name="USER")
+@Table(name = "USERS")
 public class User implements Serializable {
 
     private static final long serialVersionUID = 2214488851494822078L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")

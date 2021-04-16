@@ -4,6 +4,7 @@ import at.ac.campuswien.fh.foodsy.foodsy_backend.controller.dto.input.PostOfferD
 import at.ac.campuswien.fh.foodsy.foodsy_backend.controller.dto.output.GetOfferDTO;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.model.Offer;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 public interface OfferService {
