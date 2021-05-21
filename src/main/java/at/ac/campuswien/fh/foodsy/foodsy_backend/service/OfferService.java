@@ -3,6 +3,7 @@ package at.ac.campuswien.fh.foodsy.foodsy_backend.service;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.controller.dto.input.PostOfferDTO;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.controller.dto.output.GetOfferDTO;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.model.Offer;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.List;

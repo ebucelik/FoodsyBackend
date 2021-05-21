@@ -8,11 +8,11 @@
     <session-factory>
         <!--PROD-->
 
-                <property name="connection.driver_class">org.postgresql.Driver</property>
-                <property name="connection.url">jdbc:postgresql://ec2-52-87-107-83.compute-1.amazonaws.com:5432/d5li8c5gcrh43q</property>
-                <property name="connection.username">wslqxraoykgrnd</property>
-                <property name="connection.password">ad8020c8bc84bc0fac05e11a08d49b9f57f67802acabe6aa7872f85ce530c07a</property>
-                <property name="connection.pool_size">5</property>
+        <property name="connection.driver_class">org.postgresql.Driver</property>
+        <property name="connection.url">jdbc:postgresql://ec2-52-87-107-83.compute-1.amazonaws.com:5432/d5li8c5gcrh43q</property>
+        <property name="connection.username">wslqxraoykgrnd</property>
+        <property name="connection.password">ad8020c8bc84bc0fac05e11a08d49b9f57f67802acabe6aa7872f85ce530c07a</property>
+        <property name="connection.pool_size">5</property>
 
 
         <!--DEV
