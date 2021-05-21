@@ -22,6 +22,8 @@ public class ReviewDaoImpl implements ReviewDao {
     static Session session;
     private static final String READ_BY_ID = "SELECT distinct r FROM Review r WHERE r.id = ?0";
     private static final String READ_ALL_REVIEWS_BY_REVIEWED_PERSON = "SELECT distinct r FROM Review r WHERE r.ordering.offer.user.userUUID = ?0";
+    private static final String GET_REVIEW_QUANTITY_FROM_PERSON = "SELECT COUNT(r.id) FROM Review r WHERE r.ordering.offer.user.userUUID = ?0";
+    private static final String GET_ALL_REVIEWS_FOR_PERSON = "SELECT distinct r FROM Review r WHERE r.ordering.offer.user.userUUID = ?0";
 
     @Override
     public Review reviewOrder(Review review) {
@@ -93,6 +95,36 @@ public class ReviewDaoImpl implements ReviewDao {
             if (session != null) {
                 session.close();
             }
+        }
+    }
+
+    @Override
+    public long getReviewQuantity(String uuid) {
+        try{
+            session = sessionFactory.openSession();
+            Query<Long> getReviewQuantity = session.createQuery(GET_REVIEW_QUANTITY_FROM_PERSON);
+            getReviewQuantity.setParameter(0, uuid);
+            return getReviewQuantity.getSingleResult();
+        }catch (Exception e){
+            throw e;
+        }finally {
+            if (session != null)
+                session.close();
+        }
+    }
+
+    @Override
+    public List<Review> getReviewList(String uuid) {
+        try{
+            session = sessionFactory.openSession();
+            Query<Review> getReviewList = session.createQuery(GET_ALL_REVIEWS_FOR_PERSON);
+            getReviewList.setParameter(0, uuid);
+            return getReviewList.getResultList();
+        }catch (Exception exception){
+            throw exception;
+        }finally {
+            if (session != null)
+                session.close();
         }
     }
 }

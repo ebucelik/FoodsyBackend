@@ -52,6 +52,16 @@ public class ReviewServiceImpl implements ReviewService {
         return calculateAveragePoints(reviewDao.getAllReviewsForReviewedPerson(uuid));
     }
 
+    @Override
+    public long getReviewQuantity(String uuid) {
+        return reviewDao.getReviewQuantity(uuid);
+    }
+
+    @Override
+    public List<Review> getReviewList(String uuid) {
+        return reviewDao.getReviewList(uuid);
+    }
+
     private long calculateAveragePoints(List<Review> reviewList) {
             return Math.round((double) reviewList.stream().map(Review::getReviewPoints).reduce(0, Integer::sum)/reviewList.size());
     }

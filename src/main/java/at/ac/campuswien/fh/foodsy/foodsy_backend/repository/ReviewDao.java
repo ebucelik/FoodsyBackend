@@ -13,4 +13,8 @@ public interface ReviewDao {
     Optional<Review> getReviewById(Long id);
 
     List<Review> getAllReviewsForReviewedPerson(String uuid);
+
+    long getReviewQuantity(String uuid);
+
+    List<Review> getReviewList(String uuid);
 }
