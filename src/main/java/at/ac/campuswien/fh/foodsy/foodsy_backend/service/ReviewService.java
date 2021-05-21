@@ -13,4 +13,8 @@ public interface ReviewService {
     void deleteReview(long id);
 
     long getAverageReviewPoint(String uuid);
+
+    long getReviewQuantity(String uuid);
+
+    List<Review> getReviewList(String uuid);
 }

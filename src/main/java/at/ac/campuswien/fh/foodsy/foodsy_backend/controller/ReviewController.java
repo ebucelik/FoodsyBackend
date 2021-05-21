@@ -6,6 +6,7 @@ import at.ac.campuswien.fh.foodsy.foodsy_backend.exception.ApiInternalProcessing
 import at.ac.campuswien.fh.foodsy.foodsy_backend.exception.NoSuchOrderException;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.exception.NoSuchUserException;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.model.Review;
+import at.ac.campuswien.fh.foodsy.foodsy_backend.model.ReviewList;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Validated
 @RestController
@@ -45,6 +47,28 @@ public class ReviewController {
         } catch (Exception unexpected) {
             unexpected.printStackTrace();
             throw new ApiInternalProcessingException("Something went wrong.");
+        }
+    }
+
+    @GetMapping("/reviewQuantity")
+    @ResponseStatus(HttpStatus.OK)
+    public long getReviewQuantity(@Valid @NotNull @Size(min = 36, max = 36) @RequestParam String uuid){
+        try{
+            return reviewService.getReviewQuantity(uuid);
+        }catch (Exception unexpected){
+            unexpected.printStackTrace();
+            throw new ApiInternalProcessingException("Something went wrong: reviewQuantity");
+        }
+    }
+
+    @GetMapping("/reviewList")
+    @ResponseStatus(HttpStatus.OK)
+    public ReviewList getReviews(@Valid @NotNull @Size(min = 36, max = 36) @RequestParam String uuid){
+        try{
+            return new ReviewList(reviewService.getReviewList(uuid));
+        }catch (Exception unexpected){
+            unexpected.printStackTrace();
+            throw new ApiInternalProcessingException("Something went wrong: reviewList");
         }
     }
 }

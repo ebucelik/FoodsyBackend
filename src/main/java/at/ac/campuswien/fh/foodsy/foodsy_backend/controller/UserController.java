@@ -5,6 +5,7 @@ import at.ac.campuswien.fh.foodsy.foodsy_backend.controller.dto.output.GetUserDT
 import at.ac.campuswien.fh.foodsy.foodsy_backend.controller.mapper.UserMapper;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.exception.*;
 import at.ac.campuswien.fh.foodsy.foodsy_backend.controller.dto.input.UserCredentialsDTO;
+import at.ac.campuswien.fh.foodsy.foodsy_backend.model.User;
 import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -68,6 +69,16 @@ public class UserController {
         } catch (Exception unexpected) {
             unexpected.printStackTrace();
             throw new ApiInternalProcessingException("Internal Error while handling request", unexpected);
+        }
+    }
+
+    @DeleteMapping("/delete")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteUser(@Valid @RequestBody User user){
+        try {
+            userService.deleteUser(user);
+        }catch (Exception exception){
+            exception.printStackTrace();
         }
     }
 }

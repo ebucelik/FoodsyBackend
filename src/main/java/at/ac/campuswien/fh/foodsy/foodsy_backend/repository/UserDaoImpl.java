@@ -101,7 +101,18 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void delete(User user) {
-        throw new NotYetImplementedException();
+        try {
+            sessionObj = sessionFactory.openSession();
+            sessionObj.beginTransaction();
+            sessionObj.delete(user);
+            sessionObj.getTransaction().commit();
+        }catch (Exception e) {
+            throw e;
+        } finally {
+            if (sessionObj != null) {
+                sessionObj.close();
+            }
+        }
     }
 
     private Optional<User> get(long id) {

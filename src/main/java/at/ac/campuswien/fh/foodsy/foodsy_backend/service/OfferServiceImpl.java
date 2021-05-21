@@ -48,8 +48,9 @@ public class OfferServiceImpl implements OfferService{
         }
         return offerDao.save(new Offer(postOfferDTO.getMealName(),
                 postOfferDTO.getCategory(),postOfferDTO.getArea(),
-                postOfferDTO.getEncodedImage(),postOfferDTO.getIngredients(),
-                postOfferDTO.getTimestamp(),user.get()));
+                postOfferDTO.getEncodedImage(), postOfferDTO.getEncodedImage1(), postOfferDTO.getEncodedImage2(),
+                postOfferDTO.getIngredients(),
+                postOfferDTO.getTimestamp(), postOfferDTO.getPrice(), user.get()));
     }
 
     @Override
