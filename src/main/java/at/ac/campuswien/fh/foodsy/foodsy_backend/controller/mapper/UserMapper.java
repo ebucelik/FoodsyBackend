@@ -13,6 +13,6 @@ public class UserMapper {
     }
 
     public static GetUserDTO userToGetDTO(User user){
-        return new GetUserDTO(user.getUserUUID(), user.getUsername(),user.getFirstname(),user.getSurname(),user.getProfileImage());
+        return new GetUserDTO(user.getId(),user.getUserUUID(), user.getUsername(),user.getFirstname(),user.getSurname(),user.getProfileImage());
     }
 }

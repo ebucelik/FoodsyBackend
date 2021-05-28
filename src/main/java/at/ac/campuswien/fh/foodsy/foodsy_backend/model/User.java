@@ -70,4 +70,12 @@ public class User implements Serializable {
     public void setId(long id) {
         this.id = id;
     }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

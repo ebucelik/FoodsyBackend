@@ -7,6 +7,8 @@ import javax.validation.constraints.Size;
 @Valid
 public class GetUserDTO {
 
+    @NotNull
+    private long id;
     @Size(min = 36, max = 36)
     @NotNull
     private final String userUUID;
@@ -18,12 +20,17 @@ public class GetUserDTO {
     private final String surname;
     private final String profileImage;
 
-    public GetUserDTO(String userUUID, String username, String firstname, String surname, String profileImage) {
+    public GetUserDTO(long id, String userUUID, String username, String firstname, String surname, String profileImage) {
+        this.id = id;
         this.userUUID = userUUID;
         this.username = username;
         this.firstname = firstname;
         this.surname = surname;
         this.profileImage = profileImage;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String getUserUUID() {
