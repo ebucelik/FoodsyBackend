@@ -78,4 +78,16 @@ public class User implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
 }

@@ -100,11 +100,23 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void delete(User user) {
+    public void delete(String userUUID) {
         try {
+            Optional<User> userToDelete = this.getUUID(userUUID);
+
             sessionObj = sessionFactory.openSession();
             sessionObj.beginTransaction();
-            sessionObj.delete(user);
+            if(userToDelete.isPresent()){
+                User user = userToDelete.get();
+                user.setProfileImage(null);
+                user.setUsername("[deleted]");
+                user.setFirstname("[deleted]");
+                user.setSurname("");
+                user.setPassword(UUID.randomUUID().toString());
+                sessionObj.update(userToDelete.get());
+            }else{
+                throw new NoSuchUserException("No such user found!");
+            }
             sessionObj.getTransaction().commit();
         }catch (Exception e) {
             throw e;

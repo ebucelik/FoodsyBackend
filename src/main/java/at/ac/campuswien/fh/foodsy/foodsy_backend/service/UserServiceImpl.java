@@ -39,8 +39,8 @@ public class UserServiceImpl implements UserService {
         throw new NotYetImplementedException();
     }
     @Override
-    public void deleteUser(User user){
-        userDao.delete(user);
+    public void deleteUser(String userUUID){
+        userDao.delete(userUUID);
     }
 
 }
